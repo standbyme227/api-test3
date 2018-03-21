@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="wrap">
+    <h1>DRF API TEST</h1>
+    <div class="artists-container">
+      <h2>Artist List</h2>
+    </div>
+  </div>
+
+
+  <div id="template-artist">
+    <span class="artist-melon-id"></span>
+    <span class="artist-name"></span>
+    <span class="artist-img"></span>
+    <span class="artist-birth"></span>
+  </div>
+
+
+  <script src="js/axios.js"></script>
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script>
+    axios.get('http://localhost:8000/artist/artist/')
+      .then(function(response) {
+        var artists = response.data.artists;
+        // 단지 response.data.artists라는 긴 루트를 줄이기위해
+        // artists 변수안에 넣은것 뿐이다.
+        console.log(response.data);
+        // 위에는 전체적인 array를 출력했다면
+        for (
+          var i = 0;
+          i < artists.length;
+          i++
+        ) {
+          var currentArtist = artists[i];
+          console.log(currentArtist);
+          // 이건 for문으로 하나씩 출력한다.
+
+          var curArtistElement = $('#template-artist').clone();
+          // id가 template-artist인것을 복제하고
+          // curArtistElement라는 변수에 넣었다.
+          curArtistElement.find('.artist-melon-id').text(currentArtist.melon_id);
+          // curArtistElement안에서 artist-melon-id 라는 class를 찾고
+          // 거기의 text를 currentArtist의 melon_id로 할당한다.
+          curArtistElement.find('.artist-name').text(currentArtist.name);
+          curArtistElement.find('.artist-img').text(currentArtist.image);
+          curArtistElement.find('.artist-birth').text(currentArtist.birth_date);
+          $('.artists-container').append(curArtistElement);
+          // artists-container라는 class를 가진 곳에 curArtistElement를 추가한다.
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      })
+  </script>
+</body>
+</html>
